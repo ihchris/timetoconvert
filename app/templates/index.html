@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Time To Convert</title>
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+  <main>
+    <h1>Time to Convert?</h1>
+    <form id="form" onsubmit="return false;">
+      <div class="row">
+        <label>From</label>
+        <select id="base">
+          {% for c in supported %}
+          <option value="{{c}}">{{c}}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="row">
+        <label>To</label>
+        <select id="target">
+          {% for c in supported %}
+          <option value="{{c}}">{{c}}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <button id="check">Check</button>
+    </form>
+
+    <section id="status" class="status neutral">
+      <div class="light"></div>
+      <div class="label">Pick currencies and press Check</div>
+      <div id="details" class="details"></div>
+    </section>
+
+    <footer>
+      <small>Heuristic based on last 180 days; not financial advice.</small>
+    </footer>
+  </main>
+  <script src="/static/app.js"></script>
+</body>
+</html>

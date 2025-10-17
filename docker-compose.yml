@@ -1,0 +1,11 @@
+name: timetoconvert-app
+services:
+  web:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      - HISTORY_DAYS=180
+      - P75_THRESHOLD=0.75
+      - P50_THRESHOLD=0.50
+    restart: unless-stopped
