@@ -5,9 +5,39 @@ __pycache__
 *.sqlite3
 *.db
 .env
+.env.*
+.envrc
 .venv
+venv
 .idea
 .vscode
+*.code-workspace
 .git
 .gitignore
 node_modules
+
+# Test and coverage artifacts
+.pytest_cache
+.tox
+.nox
+.coverage
+htmlcov
+
+# Build artifacts
+build
+dist
+*.egg-info
+wheels
+pip-wheel-metadata
+
+# Type checker caches
+.mypy_cache
+.pytype
+.pyre
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Docker compose overrides
+docker-compose.override.yml
