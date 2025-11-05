@@ -129,6 +129,11 @@ def robots():
     return send_from_directory(app.static_folder, "robots.txt")
 
 
+@app.get("/about")
+def about():
+    return render_template("about.html")
+
+
 @app.get("/og.png")
 def og_image():
     # Generate a simple Open Graph image dynamically (1200x630)
