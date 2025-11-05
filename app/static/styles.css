@@ -6,6 +6,11 @@ form{display:flex;gap:16px;align-items:flex-end;flex-wrap:wrap;margin-bottom:24p
 .row{display:flex;flex-direction:column;gap:6px}
 label{font-size:12px;color:#94a3b8}
 select,button{padding:10px 12px;border-radius:8px;border:1px solid #334155;background:#0b1220;color:#e2e8f0}
+/* Improve emoji flag rendering across platforms by adding common emoji fonts */
+select, option, button, body {
+	font-family: system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,
+		"Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji","Twemoji Mozilla","EmojiOne Color",sans-serif;
+}
 button{cursor:pointer;background:#2563eb;border-color:#1d4ed8}
 button:hover{background:#1d4ed8}
 .status{display:flex;align-items:center;gap:14px;padding:16px;border-radius:12px;background:#0b1220;border:1px solid #334155}
@@ -17,3 +22,16 @@ button:hover{background:#1d4ed8}
 .label{font-weight:600}
 .details{font-size:12px;color:#94a3b8;margin-left:auto}
 footer{margin-top:28px;color:#94a3b8}
+
+/* Accessibility helper */
+.visually-hidden{position:absolute !important;left:-9999px;width:1px;height:1px;overflow:hidden}
+
+/* Custom currency select */
+.custom-select{position:relative;display:inline-block}
+.custom-select__button{display:flex;align-items:center;gap:8px;padding:10px 12px;border-radius:8px;border:1px solid #334155;background:#0b1220;color:#e2e8f0;cursor:pointer;min-width:140px}
+.custom-select__button .flag{border-radius:3px;box-shadow:0 0 0 1px rgba(0,0,0,0.2)}
+.custom-select__list{position:absolute;z-index:20;display:none;list-style:none;margin:6px 0 0;padding:6px;background:#0b1220;border:1px solid #334155;border-radius:8px;max-height:240px;overflow:auto;min-width:160px;box-shadow:0 10px 20px rgba(0,0,0,.3)}
+.custom-select.open .custom-select__list{display:block}
+.custom-select__option{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:6px;cursor:pointer;white-space:nowrap}
+.custom-select__option:hover{background:#111827}
+.custom-select__option .flag{border-radius:3px;box-shadow:0 0 0 1px rgba(0,0,0,0.2)}

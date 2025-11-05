@@ -12,19 +12,49 @@
     <form id="form" onsubmit="return false;">
       <div class="row">
         <label>From</label>
-        <select id="base">
+        <!-- Keep the native select for accessibility and simple value storage -->
+        <select id="base" class="native-select visually-hidden" aria-label="Base currency">
           {% for c in supported %}
           <option value="{{c}}">{{c}}</option>
           {% endfor %}
         </select>
+        <!-- Custom dropdown with flag images -->
+        <div class="custom-select" data-for="base">
+          <button type="button" class="custom-select__button" aria-haspopup="listbox" aria-expanded="false">
+            <img class="flag" alt="" src="https://flagcdn.com/24x18/{{ flag_codes.get(supported[0]) }}.png" width="24" height="18" />
+            <span class="code">{{ supported[0] }}</span>
+          </button>
+          <ul class="custom-select__list" role="listbox">
+            {% for c in supported %}
+            <li class="custom-select__option" role="option" data-value="{{ c }}">
+              <img class="flag" alt="" src="https://flagcdn.com/24x18/{{ flag_codes.get(c) }}.png" width="24" height="18" />
+              <span class="code">{{ c }}</span>
+            </li>
+            {% endfor %}
+          </ul>
+        </div>
       </div>
       <div class="row">
         <label>To</label>
-        <select id="target">
+        <select id="target" class="native-select visually-hidden" aria-label="Target currency">
           {% for c in supported %}
           <option value="{{c}}">{{c}}</option>
           {% endfor %}
         </select>
+        <div class="custom-select" data-for="target">
+          <button type="button" class="custom-select__button" aria-haspopup="listbox" aria-expanded="false">
+            <img class="flag" alt="" src="https://flagcdn.com/24x18/{{ flag_codes.get(supported[1]) }}.png" width="24" height="18" />
+            <span class="code">{{ supported[1] }}</span>
+          </button>
+          <ul class="custom-select__list" role="listbox">
+            {% for c in supported %}
+            <li class="custom-select__option" role="option" data-value="{{ c }}">
+              <img class="flag" alt="" src="https://flagcdn.com/24x18/{{ flag_codes.get(c) }}.png" width="24" height="18" />
+              <span class="code">{{ c }}</span>
+            </li>
+            {% endfor %}
+          </ul>
+        </div>
       </div>
       <button id="check">Check</button>
     </form>

@@ -13,6 +13,36 @@ SUPPORTED = [
     "USD","EUR","GBP","JPY","AUD","CAD","CHF","CNY","SEK","NZD","BRL"
 ]
 
+# Simple currency -> flag emoji mapping for UI selects
+FLAGS = {
+    "USD": "🇺🇸",
+    "EUR": "🇪🇺",
+    "GBP": "🇬🇧",
+    "JPY": "🇯🇵",
+    "AUD": "🇦🇺",
+    "CAD": "🇨🇦",
+    "CHF": "🇨🇭",
+    "CNY": "🇨🇳",
+    "SEK": "🇸🇪",
+    "NZD": "🇳🇿",
+    "BRL": "🇧🇷",
+}
+
+# Map currency codes to ISO 3166-1 alpha-2 country/region codes for flag images
+FLAG_CODES = {
+    "USD": "us",
+    "EUR": "eu",
+    "GBP": "gb",
+    "JPY": "jp",
+    "AUD": "au",
+    "CAD": "ca",
+    "CHF": "ch",
+    "CNY": "cn",
+    "SEK": "se",
+    "NZD": "nz",
+    "BRL": "br",
+}
+
 # Using Frankfurter (free, no auth): https://www.frankfurter.app/
 BASE_URL = "https://api.frankfurter.app"
 
@@ -90,7 +120,7 @@ def compute_signal(base: str, target: str, history_days: int = HISTORY_DAYS):
 
 @app.get("/")
 def index():
-    return render_template("index.html", supported=SUPPORTED)
+    return render_template("index.html", supported=SUPPORTED, flags=FLAGS, flag_codes=FLAG_CODES)
 
 
 @app.get("/api/signal")
