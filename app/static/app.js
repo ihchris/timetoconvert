@@ -9,6 +9,27 @@ function setStatus(kind, text, details) {
   detailsEl.textContent = details || '';
 }
 
+function updateSeo(base, target, signal, days) {
+  const title = `${base}→${target} — ${signal.charAt(0).toUpperCase()+signal.slice(1)} signal | Time To Convert`;
+  document.title = title;
+  const desc = `Check if it's a good time to convert ${base} to ${target}. Signal based on last ${days} days.`;
+  const md = document.querySelector('meta[name="description"]');
+  if (md) md.setAttribute('content', desc);
+  const ogt = document.querySelector('meta[property="og:title"]');
+  if (ogt) ogt.setAttribute('content', title);
+  const ogd = document.querySelector('meta[property="og:description"]');
+  if (ogd) ogd.setAttribute('content', desc);
+  const twt = document.querySelector('meta[name="twitter:title"]');
+  if (twt) twt.setAttribute('content', title);
+  const twd = document.querySelector('meta[name="twitter:description"]');
+  if (twd) twd.setAttribute('content', desc);
+  const imgUrl = `${window.location.origin}/og.png?base=${encodeURIComponent(base)}&target=${encodeURIComponent(target)}&signal=${encodeURIComponent(signal)}&days=${encodeURIComponent(days)}`;
+  const ogi = document.querySelector('meta[property="og:image"]');
+  if (ogi) ogi.setAttribute('content', imgUrl);
+  const twi = document.querySelector('meta[name="twitter:image"]');
+  if (twi) twi.setAttribute('content', imgUrl);
+}
+
 const FLAGS = {
   USD: '🇺🇸', EUR: '🇪🇺', GBP: '🇬🇧', JPY: '🇯🇵', AUD: '🇦🇺',
   CAD: '🇨🇦', CHF: '🇨🇭', CNY: '🇨🇳', SEK: '🇸🇪', NZD: '🇳🇿', BRL: '🇧🇷'
@@ -121,6 +142,7 @@ async function check() {
       label,
       latest ? `${baseLabel}/${targetLabel} = ${latest.toFixed(4)} | p50=${p50.toFixed(4)} p75=${p75.toFixed(4)} over ${days}d` : ''
     );
+    if (latest) updateSeo(base, target, signal, days);
   } catch (e) {
     setStatus('red', 'Error fetching signal', e.message);
   }

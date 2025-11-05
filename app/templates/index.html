@@ -3,7 +3,23 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Time To Convert</title>
+  <title>Time To Convert — Simple FX timing signal</title>
+  <meta name="description" content="Check if it's a good time to convert currencies. Simple green/amber/red signal from recent rates (last 180 days). Not financial advice.">
+  <meta name="robots" content="index,follow">
+  <link rel="canonical" href="{{ url_for('index', _external=True) }}">
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Time To Convert — Simple FX timing signal">
+  <meta property="og:description" content="Check if it's a good time to convert currencies. Simple green/amber/red signal from recent rates.">
+  <meta property="og:url" content="{{ url_for('index', _external=True) }}">
+  <meta property="og:image" content="{{ url_for('og_image', _external=True) }}">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Time To Convert — Simple FX timing signal">
+  <meta name="twitter:description" content="Green/amber/red timing hints from recent FX rates.">
+  <meta name="twitter:image" content="{{ url_for('og_image', _external=True) }}">
   <link rel="stylesheet" href="/static/styles.css">
 </head>
 <body>

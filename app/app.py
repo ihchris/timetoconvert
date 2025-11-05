@@ -1,6 +1,7 @@
 import os
 from datetime import date, timedelta
-from flask import Flask, jsonify, render_template, request
+from flask import Flask, jsonify, render_template, request, send_from_directory, Response
+from io import BytesIO
 import requests
 
 app = Flask(__name__, template_folder="templates", static_folder="static")
@@ -121,6 +122,77 @@ def compute_signal(base: str, target: str, history_days: int = HISTORY_DAYS):
 @app.get("/")
 def index():
     return render_template("index.html", supported=SUPPORTED, flags=FLAGS, flag_codes=FLAG_CODES)
+
+
+@app.get("/robots.txt")
+def robots():
+    return send_from_directory(app.static_folder, "robots.txt")
+
+
+@app.get("/og.png")
+def og_image():
+    # Generate a simple Open Graph image dynamically (1200x630)
+    try:
+        from PIL import Image, ImageDraw, ImageFont
+        # Inputs (optional) to personalize the image
+        base = (request.args.get("base") or "").upper()[:4]
+        target = (request.args.get("target") or "").upper()[:4]
+        signal = (request.args.get("signal") or "").lower()
+        days = request.args.get("days") or ""
+
+        W, H = 1200, 630
+        img = Image.new("RGB", (W, H), "#0f172a")
+        draw = ImageDraw.Draw(img)
+
+        # Title and subtitle
+        title = "Time To Convert"
+        if base and target:
+            pair = f"{base}→{target}"
+        else:
+            pair = "Simple FX timing"
+        if signal in ("green", "amber", "red"):
+            subtitle = f"{pair} — {signal.capitalize()} signal"
+        else:
+            subtitle = f"{pair} (p50 / p75)"
+        if days:
+            subtitle += f" • last {days}d"
+
+        # Load a truetype font if available
+        font_path = "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf"
+        try:
+            font_title = ImageFont.truetype(font_path, 72)
+            font_sub = ImageFont.truetype(font_path, 36)
+        except Exception:
+            font_title = ImageFont.load_default()
+            font_sub = ImageFont.load_default()
+
+        # Centered text
+        tw, th = draw.textbbox((0, 0), title, font=font_title)[2:]
+        sw, sh = draw.textbbox((0, 0), subtitle, font=font_sub)[2:]
+        draw.text(((W - tw) / 2, (H - th) / 2 - 20), title, font=font_title, fill="#e2e8f0")
+        draw.text(((W - sw) / 2, (H - sh) / 2 + 60), subtitle, font=font_sub, fill="#94a3b8")
+
+        # Accent circle color based on signal
+        color = {
+            "green": "#10b981",
+            "amber": "#f59e0b",
+            "red": "#ef4444",
+        }.get(signal, "#10b981")
+        r = 18
+        cx, cy = 80, 80
+        draw.ellipse((cx - r, cy - r, cx + r, cy + r), fill=color)
+
+        bio = BytesIO()
+        img.save(bio, format="PNG")
+        bio.seek(0)
+        return Response(bio.getvalue(), mimetype="image/png")
+    except Exception:
+        # Fallback: 1x1 transparent PNG
+        transparent_png = (
+            b"\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR\x00\x00\x00\x01\x00\x00\x00\x01\x08\x06\x00\x00\x00\x1f\x15\xc4\x89"
+            b"\x00\x00\x00\x0cIDATx\x9cc``\x00\x00\x00\x02\x00\x01\xe2!\xbc3\x00\x00\x00\x00IEND\xaeB`\x82"
+        )
+        return Response(transparent_png, mimetype="image/png")
 
 
 @app.get("/api/signal")
