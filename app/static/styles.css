@@ -35,3 +35,4 @@ footer{margin-top:28px;color:#94a3b8}
 .custom-select__option{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:6px;cursor:pointer;white-space:nowrap}
 .custom-select__option:hover{background:#111827}
 .custom-select__option .flag{border-radius:3px;box-shadow:0 0 0 1px rgba(0,0,0,0.2)}
+.custom-select__option.hidden{display:none}

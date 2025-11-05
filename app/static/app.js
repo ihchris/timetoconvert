@@ -14,6 +14,8 @@ const FLAGS = {
   CAD: '🇨🇦', CHF: '🇨🇭', CNY: '🇨🇳', SEK: '🇸🇪', NZD: '🇳🇿', BRL: '🇧🇷'
 };
 
+const customSelects = {};
+
 function initCustomSelect(forId){
   const select = qs(`#${forId}`);
   const root = document.querySelector(`.custom-select[data-for="${forId}"]`);
@@ -34,6 +36,15 @@ function initCustomSelect(forId){
     button.appendChild(span);
   };
   setButton(select.value);
+  const api = {
+    select, root, button, list,
+    setButton,
+    setValue(val){
+      select.value = val;
+      setButton(val);
+    }
+  };
+  customSelects[forId] = api;
   // Toggle open
   button.addEventListener('click', ()=>{
     const isOpen = root.classList.contains('open');
@@ -46,10 +57,10 @@ function initCustomSelect(forId){
     const li = e.target.closest('.custom-select__option');
     if (!li) return;
     const val = li.getAttribute('data-value');
-    select.value = val;
-    setButton(val);
+    api.setValue(val);
     root.classList.remove('open');
     button.setAttribute('aria-expanded', 'false');
+    onChange(forId);
   });
   // Close on outside click
   document.addEventListener('click', (e)=>{
@@ -60,9 +71,34 @@ function initCustomSelect(forId){
   });
 }
 
+function onChange(changedId){
+  const otherId = changedId === 'base' ? 'target' : 'base';
+  const changed = customSelects[changedId];
+  const other = customSelects[otherId];
+  if (!changed || !other) return;
+  const v = changed.select.value;
+  // Hide same currency in the other dropdown
+  other.list.querySelectorAll('.custom-select__option').forEach(li => {
+    const isSame = li.getAttribute('data-value') === v;
+    li.classList.toggle('hidden', isSame);
+  });
+  // If other currently equals the same value, pick the first available different option
+  if (other.select.value === v){
+    const first = Array.from(other.list.querySelectorAll('.custom-select__option'))
+      .find(li => !li.classList.contains('hidden'));
+    if (first){
+      const nextVal = first.getAttribute('data-value');
+      other.setValue(nextVal);
+    }
+  }
+}
+
 document.addEventListener('DOMContentLoaded', ()=>{
   initCustomSelect('base');
   initCustomSelect('target');
+  // Apply initial hiding so each dropdown can't choose the other's current value
+  onChange('base');
+  onChange('target');
 });
 
 async function check() {
